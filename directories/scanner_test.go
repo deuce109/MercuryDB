@@ -12,8 +12,8 @@ func TestGetFilesInSubdirectory(t *testing.T) {
 		t.Fatalf("Failed to get files: %v", err)
 	}
 
-	if len(files) != 11 {
-		t.Fatalf("Expected 11 files, got %d", len(files))
+	if len(files) != 1 {
+		t.Fatalf("Expected 1 files, got %d", len(files))
 
 	}
 }

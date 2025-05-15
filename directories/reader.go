@@ -1,18 +1,25 @@
 package directories
 
 import (
-	"fmt"
 	"os"
 	"sync"
+
+	"github.com/deuce109/mercurydb/v2/geometry"
+	"github.com/deuce109/mercurydb/v2/serialization"
 )
 
+type ReaderResult struct {
+	Geometry *geometry.Geometry
+	Err error
+}
+
 type DataReader struct {
-	Results chan []byte
+	Results chan ReaderResult
 }
 
 func NewDataReader() *DataReader {
 	return &DataReader{
-		Results: make(chan []byte),
+		Results: make(chan ReaderResult),
 	}
 }
 
@@ -43,7 +50,14 @@ func (dr *DataReader) readFile(file string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	data, err := os.ReadFile(file)
 	if err != nil {
-		fmt.Printf("Error reading file %s: %v", file, err)
+		dr.Results <- ReaderResult{Geometry: nil, Err: err}
+		return
 	}
-	dr.Results <- data
+
+	geo := &geometry.Geometry{}
+
+	err = serialization.Deserialize(data, geo)
+
+	dr.Results <- ReaderResult{Geometry: geo, Err: err}
+
 }

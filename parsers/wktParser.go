@@ -15,7 +15,7 @@ func GetSupportedWktTypes() []string {
 	return []string{POLY_PREFIX, POINT_PREFIX}
 }
 
-func ParseWkt(coordinateString string) *geometry.Geometry {
+func ParseWktCoordinates(coordinateString string) *geometry.Geometry {
 	pointList, err := getPoints(coordinateString)
 	if err != nil {
 		fmt.Printf("Error processing WKT points%s", err)

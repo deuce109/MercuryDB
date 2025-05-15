@@ -1,10 +1,6 @@
 package geometry
 
-type Point struct {
-	Coordinates []Coordinates
-}
-
-func pointFromCoords(x float64, y float64) *Point {
+func pointFromCoords(x float64, y float64) *Geometry {
 	coords := Coordinates{
 		X: x,
 		Y: y,
@@ -13,7 +9,7 @@ func pointFromCoords(x float64, y float64) *Point {
 		coords,
 	}
 
-	return &Point{
+	return &Geometry{
 		Coordinates: pointCoordinates,
 	}
 }

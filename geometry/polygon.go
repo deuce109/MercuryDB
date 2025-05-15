@@ -4,11 +4,7 @@ import (
 	"math"
 )
 
-type Polygon struct {
-	Coordinates []Coordinates // Points of the polygon in counterclockwise order
-}
-
-func (p *Polygon) Center() Coordinates {
+func (p *Geometry) Center() Coordinates {
 	var x, y float64
 	for _, pt := range p.Coordinates {
 		x += pt.X
@@ -20,7 +16,7 @@ func (p *Polygon) Center() Coordinates {
 	}
 }
 
-func (p *Polygon) Area() float64 {
+func (p *Geometry) Area() float64 {
 	area := 0.0
 	var nextPoint Coordinates
 	for i, pt := range p.Coordinates {
@@ -37,7 +33,7 @@ func (p *Polygon) Area() float64 {
 	return math.Abs(area / 2.0)
 }
 
-func (p *Polygon) Perimeter() float64 {
+func (p *Geometry) Perimeter() float64 {
 	perimiter := 0.0
 	var nextPoint Coordinates
 	for i, pt := range p.Coordinates {
@@ -56,7 +52,7 @@ func (p *Polygon) Perimeter() float64 {
 	return perimiter
 }
 
-func (p *Polygon) getBoundingBox() (minX, minY, maxX, maxY float64) {
+func (p *Geometry) getBoundingBox() (minX, minY, maxX, maxY float64) {
 	minX = p.Coordinates[0].X
 	minY = p.Coordinates[0].Y
 	maxX = p.Coordinates[0].X
@@ -73,7 +69,7 @@ func (p *Polygon) getBoundingBox() (minX, minY, maxX, maxY float64) {
 	return minX, minY, maxX, maxY
 }
 
-func (p *Polygon) raycast(pt Coordinates) bool {
+func (p *Geometry) raycast(pt Coordinates) bool {
 
 	intersections := 0
 	numVerticies := len(p.Coordinates)
@@ -91,7 +87,7 @@ func (p *Polygon) raycast(pt Coordinates) bool {
 	return intersections%2 == 1
 }
 
-func (p *Polygon) ContainsCoordinates(pt Coordinates) bool {
+func (p *Geometry) containsCoordinates(pt Coordinates) bool {
 	minX, minY, maxX, maxY := p.getBoundingBox()
 	if pt.X < minX || pt.X > maxX || pt.Y < minY || pt.Y > maxY {
 		return false
@@ -100,25 +96,34 @@ func (p *Polygon) ContainsCoordinates(pt Coordinates) bool {
 	return p.raycast(pt)
 }
 
-func (p *Polygon) Intersects(other Polygon) bool {
+func (p *Geometry) Intersects(other *Geometry) bool {
 	for _, pt := range other.Coordinates {
-		if p.ContainsCoordinates(pt) {
+		if p.containsCoordinates(pt) {
 			return true
 		}
 	}
+
 	for _, pt := range p.Coordinates {
-		if other.ContainsCoordinates(pt) {
+		if other.containsCoordinates(pt) {
 			return true
 		}
 	}
 	return false
 }
 
-func (p *Polygon) ContainsPolygon(other Polygon) bool {
+func (p *Geometry) containsPolygon(other *Geometry) bool {
 	for _, pt := range other.Coordinates {
-		if !p.ContainsCoordinates(pt) {
+		if !p.containsCoordinates(pt) {
 			return false
 		}
 	}
 	return true
+}
+
+func (p *Geometry) Contains(other *Geometry) bool {
+	if len(other.Coordinates) == 1 {
+		return p.containsCoordinates(other.Coordinates[0])
+	} else {
+		return p.containsPolygon(other)
+	}
 }
