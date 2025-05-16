@@ -1,9 +1,12 @@
 package directories
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 
+	"github.com/deuce109/mercurydb/v2/config"
 	"github.com/deuce109/mercurydb/v2/geometry"
 	"github.com/deuce109/mercurydb/v2/serialization"
 )
@@ -45,6 +48,24 @@ func (dr *DataReader) ReadFiles(files ...string) {
 	wg.Wait()
 	close(dr.Results)
 }
+
+func (dr *DataReader) ReadSingleFile(id string) {
+	path, err := filepath.Abs(filepath.Join(config.Config.DataPath, fmt.Sprintf("%s.bin", id)))
+	
+	if err != nil {
+		dr.Results <- ReaderResult{
+			Geometry: nil,
+			Err: err,
+		}
+		return
+	}
+	
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	go dr.readFile(path, &wg)
+} 
 
 func (dr *DataReader) readFile(file string, wg *sync.WaitGroup) {
 	defer wg.Done()

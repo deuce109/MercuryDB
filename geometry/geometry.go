@@ -11,6 +11,7 @@ type Geometry struct {
 	Coordinates []Coordinates
 	Name string
 	Id string
+	Data map[string]interface{}
 }
 
 func (c *Coordinates) DistanceTo(other Coordinates) float64 {

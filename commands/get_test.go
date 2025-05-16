@@ -11,6 +11,8 @@ import (
 func TestMain(m *testing.M) {
 	config.Load()
 
+	config.Config.DataPath = "../testFiles"
+
 	geom := &geometry.Geometry{
 		Coordinates: []geometry.Coordinates{
 			{X:5, Y:7},

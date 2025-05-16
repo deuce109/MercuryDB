@@ -24,7 +24,7 @@ func WriteToDirectory(obj *geometry.Geometry, path string) error {
 		return err
 	}
 
-	err = os.WriteFile(filepath.Join(fullPath, fmt.Sprintf("%s.bin", obj.Id)), data, os.ModeAppend)
+	err = os.WriteFile(filepath.Join(fullPath, fmt.Sprintf("%s.bin", obj.Id)), data, 0644)
 	if err != nil {
 		return err
 	}
