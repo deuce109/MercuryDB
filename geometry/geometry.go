@@ -9,6 +9,7 @@ type Coordinates struct {
 
 type Geometry struct {
 	Coordinates []Coordinates
+	Name        string
 }
 
 func (c *Coordinates) DistanceTo(other Coordinates) float64 {

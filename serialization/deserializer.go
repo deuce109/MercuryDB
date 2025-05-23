@@ -5,7 +5,15 @@ import (
 	"compress/gzip"
 	"encoding/gob"
 	"io"
+
+	"github.com/deuce109/mercurydb/v2/geometry"
 )
+
+func gobDecodeObject(data []byte, result interface{}) error {
+	reader := bytes.NewReader(data)
+	dec := gob.NewDecoder(reader)
+	return dec.Decode(result)
+}
 
 func decompress(data []byte) ([]byte, error) {
 	var buf bytes.Buffer
@@ -20,15 +28,16 @@ func decompress(data []byte) ([]byte, error) {
 	return decompressed, err
 }
 
-func Deserialize(data []byte, result interface{}) error {
+func DeserializeDataChunk(data []byte, result interface{}) error {
+
 	decompressed, err := decompress(data)
+
 	if err != nil {
 		return err
 	}
+	return gobDecodeObject(decompressed, result)
+}
 
-	reader := bytes.NewReader(decompressed)
-	dec := gob.NewDecoder(reader)
-	err = dec.Decode(result)
-
-	return err
+func DeserializeGeometry(data []byte, geom *geometry.Geometry) error {
+	return DeserializeDataChunk(data, geom)
 }

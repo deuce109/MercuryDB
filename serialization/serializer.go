@@ -4,28 +4,48 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/gob"
+
+	"github.com/deuce109/mercurydb/v2/geometry"
 )
 
-func compress(data []byte) ([]byte, error) {
+func gobEncodeObject(obj interface{}) ([]byte, error) {
+	var buf bytes.Buffer
+
+	enc := gob.NewEncoder(&buf)
+	err := enc.Encode(obj)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+
+}
+
+func compress(data []byte) ([]byte, int, error) {
 	var buf bytes.Buffer
 	gz := gzip.NewWriter(&buf)
 	_, err := gz.Write(data)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
 	err = gz.Close()
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
-	return buf.Bytes(), nil
+
+	compressed := buf.Bytes()
+	return compressed, len(compressed), nil
 }
 
-func Serialize(data interface{}) ([]byte, error) {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	err := enc.Encode(data)
+func SerializeDataChunk(data interface{}) ([]byte, int, error) {
+	gobbedData, err := gobEncodeObject(data)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
-	return compress(buf.Bytes())
+	return compress(gobbedData)
+}
+
+func SerializeGeometry(geo geometry.Geometry) ([]byte, int, error) {
+	return SerializeDataChunk(geo)
 }

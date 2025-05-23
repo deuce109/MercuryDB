@@ -2,14 +2,18 @@ package serialization
 
 import (
 	"testing"
+
+	"github.com/deuce109/mercurydb/v2/geometry"
 )
 
 func TestSerialize(t *testing.T) {
 
-	example := Example{Name: "Test", Value: 42}
+	example := geometry.Geometry{
+		Coordinates: []geometry.Coordinates{},
+	}
 
 	// Serialize the example struct
-	data, err := Serialize(example)
+	data, _, err := SerializeGeometry(example)
 	if err != nil {
 		t.Fatalf("Failed to serialize: %v", err)
 	}
@@ -23,7 +27,7 @@ func TestSerialize(t *testing.T) {
 func TestSerializeNilValue(t *testing.T) {
 
 	// Serialize the empty struct
-	_, err := Serialize(nil)
+	_, _, err := SerializeDataChunk(nil)
 	if err == nil {
 		t.Fatal("Expected error when serialziing nil struct, got nil")
 	}
