@@ -1,3 +1,3 @@
-module github.com/deuce109/mercurydb/v2
+module deuce109/mercurydb/v2
 
-go 1.22.2
+go 1.24.5
