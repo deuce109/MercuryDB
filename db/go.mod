@@ -1,15 +1,17 @@
 module github.com/deuce109/mercurydb/v2/db
 
-go 1.24.5
+go 1.27.4
 
 replace github.com/deuce109/mercurydb/v2/common => ../common
 
-require github.com/deuce109/mercurydb/v2/common v1.0.0-00010101000000-000000000000
-
-require github.com/google/uuid v1.6.0
-
 require (
 	github.com/deuce109/envparse/v2 v2.0.0-20250921042538-fdcaff8eca3f
+	github.com/deuce109/mercurydb/v2/common v1.0.0-00010101000000-000000000000
+	github.com/google/uuid v1.6.0
+	modernc.org/sqlite v1.39.0
+)
+
+require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
@@ -19,5 +21,4 @@ require (
 	modernc.org/libc v1.66.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.39.0
 )
