@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"log/slog"
 	"sync"
 
 	"github.com/deuce109/mercurydb/v2/common/geometry"
@@ -10,8 +11,10 @@ import (
 const WITHIN string = "WITHIN"
 
 func fileGeoWithin(file *io.MercuryFile, geo geometry.Geometry, results chan *io.MercuryFile, wg *sync.WaitGroup) {
-	if geo.Contains(file.GetGeometry()) {
+	if contains, err := geo.Contains(file.GetGeometry()); contains {
 		results <- file
+	} else if err != nil {
+		slog.Error("Error check if geometry contains another", "error", err)
 	}
 	wg.Done()
 }
