@@ -19,7 +19,7 @@ type CommandHandler struct {
 }
 
 func newCommandHandler() (*CommandHandler, error) {
-	fileScanner, err := io.NewDirectoryScanner(filepath.Join(config.GetUserDbPath(), "geo"))
+	fileScanner, err := io.NewDirectoryScanner(filepath.Join(config.GetDataPath(), "geo"))
 
 	if err != nil {
 		return nil, err

@@ -18,7 +18,7 @@ func authHandlerLifecycle(t *testing.T) {
 	setenv(t)
 	config.Load()
 
-	t.Log(config.GetUserDbPath())
+	t.Log(config.GetUserDBConnectionString())
 
 	handler, err := NewAuthHandler()
 

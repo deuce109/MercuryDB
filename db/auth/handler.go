@@ -46,7 +46,7 @@ func (a *authenticationHandler) Close() error {
 }
 
 func NewAuthHandler() (*authenticationHandler, error) {
-	db, err := newAuthDatabase(config.GetUserDbPath())
+	db, err := newAuthDatabase(config.GetUserDBConnectionString())
 
 	if err != nil {
 		return nil, err
