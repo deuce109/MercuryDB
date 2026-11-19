@@ -1,0 +1,11 @@
+services:
+  mercurydb:
+    image: mercurydb:latest
+    ports:
+      - 12000:12000
+
+    volumes:
+      - ./data/:/mercury/data
+
+    environemnt:
+      MERCURY_DATA_PATH: /mercury/data
