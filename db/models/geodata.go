@@ -10,7 +10,7 @@ import (
 type Metadata = map[string]interface{}
 
 type GeoData struct {
-	Geometry *geometry.Geometry
+	Geometry geometry.Geometry
 	Metadata Metadata
 	Id       string
 }

@@ -24,11 +24,9 @@ func compress(data io.Reader) (io.Reader, error) {
 	var buf bytes.Buffer
 	gz := gzip.NewWriter(&buf)
 
+	defer gz.Close()
+
 	_, err := io.Copy(gz, data)
-	if err != nil {
-		return nil, err
-	}
-	err = gz.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -44,8 +42,23 @@ func SerializeDataChunk(data interface{}) (io.Reader, error) {
 	return compress(gobbedData)
 }
 
-func SerializeGeometry(geo *geometry.Geometry) (io.Reader, error) {
-	return SerializeDataChunk(geo)
+func SerializeGeometry(geo geometry.Geometry) (io.Reader, error) {
+	geoType := geo.GetType()
+
+	buffer := &bytes.Buffer{}
+
+	buffer.Write([]byte(geoType))
+
+	geoReader, err := SerializeDataChunk(geo)
+
+	if err != nil {
+		return nil, err
+	}
+
+
+	_, err = io.Copy(buffer, geoReader)
+
+	return buffer, err
 }
 
 func SerializeToJson(data interface{}) (io.Reader, error) {

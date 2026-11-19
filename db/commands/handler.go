@@ -57,7 +57,7 @@ func (h *CommandHandler) HandleMessage(message string) (coreIo.Reader, error) {
 	}
 }
 
-func (h *CommandHandler) findFilesMatching(geo *geometry.Geometry, matcher func(*io.MercuryFile, *geometry.Geometry, chan *io.MercuryFile, *sync.WaitGroup)) []*io.MercuryFile {
+func (h *CommandHandler) findFilesMatching(geo geometry.Geometry, matcher func(*io.MercuryFile, geometry.Geometry, chan *io.MercuryFile, *sync.WaitGroup)) []*io.MercuryFile {
 	files := h.directoryScanner.FindMercuryFiles()
 
 	results := make(chan *io.MercuryFile)
@@ -80,7 +80,7 @@ func (h *CommandHandler) findFilesMatching(geo *geometry.Geometry, matcher func(
 	return data
 }
 
-func (h *CommandHandler) getDataMatching(fileFinder func(*geometry.Geometry) []*io.MercuryFile, args []string) (coreIo.Reader, error) {
+func (h *CommandHandler) getDataMatching(fileFinder func(geometry.Geometry) []*io.MercuryFile, args []string) (coreIo.Reader, error) {
 	geo := geometry.FromWKT(args[0])
 	files := fileFinder(geo)
 	return h.getDataFromFiles(files, args[1:])

@@ -13,23 +13,23 @@ func GetSupportedWktTypes() []string {
 	return []string{POLY_PREFIX, POINT_PREFIX}
 }
 
-func FromWKT(coordinateString string) *Geometry {
+func FromWKT(coordinateString string) *Polygon {
 	pointList, err := getPoints(coordinateString)
 	if err != nil {
 		fmt.Printf("Error processing WKT points%s", err)
 		return nil
 	}
 
-	return &Geometry{
+	return &Polygon{
 		Coordinates: pointList,
 	}
 }
 
-func getPoints(pointString string) ([]Coordinates, error) {
+func getPoints(pointString string) ([]*Point, error) {
 
 	pointsSplit := strings.Split(strings.TrimPrefix(strings.TrimSuffix(pointString, ")"), "("), ", ")
 
-	points := make([]Coordinates, len(pointsSplit))
+	points := make([]*Point, len(pointsSplit))
 
 	for _, p := range pointsSplit {
 		coords := strings.Split(strings.TrimPrefix(strings.TrimSuffix(p, ")"), "("), " ")
@@ -43,7 +43,7 @@ func getPoints(pointString string) ([]Coordinates, error) {
 			return nil, err
 		}
 
-		pt := Coordinates{
+		pt := &Point{
 			X: x,
 			Y: y,
 		}

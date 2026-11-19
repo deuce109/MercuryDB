@@ -58,24 +58,36 @@ func (f *MercuryFile) Close() error {
 	return err
 }
 
-func (f *MercuryFile) GeometryContains(geo *geometry.Geometry) bool {
+func (f *MercuryFile) GeometryContains(geo geometry.Geometry) bool {
 	fileGeo, err := f.readGeometry()
 
 	if err != nil {
 		slog.Error("Error reading geometry from file", "file", f.Path, "error", err)
 	}
 
-	return fileGeo.Contains(geo)
+	contains, err := fileGeo.Contains(geo)
+
+	if err != nil {
+		slog.Error("Error calclating if geometry contains another geometry", "error", err)
+	}
+
+	return contains
 }
 
-func (f *MercuryFile) GeometryIntersects(geo *geometry.Geometry) bool {
+func (f *MercuryFile) GeometryIntersects(geo geometry.Geometry) bool {
 	fileGeo, err := f.readGeometry()
 
 	if err != nil {
 		slog.Error("Error reading geometry from file", "file", f.Path, "error", err)
 	}
 
-	return fileGeo.Intersects(geo)
+	intersects, err := fileGeo.Intersects(geo)
+
+	if err != nil {
+		slog.Error("Error calclating if geometry intersects another geometry", "error", err)
+	}
+
+	return intersects
 }
 
 func (f *MercuryFile) writeHeader() error {
@@ -119,7 +131,7 @@ func (f *MercuryFile) writeMetadata(dataChunk models.Metadata) error {
 	return f.writeFrom(data)
 }
 
-func (f *MercuryFile) writeGeometry(geom *geometry.Geometry) error {
+func (f *MercuryFile) writeGeometry(geom geometry.Geometry) error {
 	data, err := serialization.SerializeGeometry(geom)
 	if err != nil {
 		return err
@@ -218,7 +230,7 @@ func (f *MercuryFile) readMetadata(names []string) (models.Metadata, error) {
 	return result, err
 }
 
-func (f *MercuryFile) readGeometry() (*geometry.Geometry, error) {
+func (f *MercuryFile) readGeometry() (geometry.Geometry, error) {
 	size, err := f.readUInt64()
 
 	if err != nil {
@@ -231,13 +243,13 @@ func (f *MercuryFile) readGeometry() (*geometry.Geometry, error) {
 		return nil, err
 	}
 
-	var result *geometry.Geometry
+	var result geometry.Geometry
 
 	err = serialization.DeserializeGeometry(data, result)
 	return result, err
 }
 
-func (f *MercuryFile) GetGeometry() *geometry.Geometry {
+func (f *MercuryFile) GetGeometry() geometry.Geometry {
 	geo, err := f.readGeometry()
 
 	if err != nil {

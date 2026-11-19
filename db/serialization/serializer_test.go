@@ -9,8 +9,12 @@ import (
 
 func TestSerialize(t *testing.T) {
 
-	example := &geometry.Geometry{
-		Coordinates: []geometry.Coordinates{},
+	example := &geometry.Circle{
+		Center: &geometry.Point{
+			X: 5, 
+			Y: 6,
+		},
+		Radius: 0.5,
 	}
 
 	// Serialize the example struct

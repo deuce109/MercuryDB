@@ -9,13 +9,13 @@ import (
 
 const WITHIN string = "WITHIN"
 
-func fileGeoWithin(file *io.MercuryFile, geo *geometry.Geometry, results chan *io.MercuryFile, wg *sync.WaitGroup) {
+func fileGeoWithin(file *io.MercuryFile, geo geometry.Geometry, results chan *io.MercuryFile, wg *sync.WaitGroup) {
 	if geo.Contains(file.GetGeometry()) {
 		results <- file
 	}
 	wg.Done()
 }
 
-func (h *CommandHandler) within(geo *geometry.Geometry) []*io.MercuryFile {
+func (h *CommandHandler) within(geo geometry.Geometry) []*io.MercuryFile {
 	return h.findFilesMatching(geo, fileGeoWithin)
 }
