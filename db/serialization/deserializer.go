@@ -60,13 +60,14 @@ func DeserializeGeometry(r io.Reader) (geometry.Geometry, error) {
 	for i := geometry.MinTypeStringLength; i <= geometry.MaxTypeStringLength; i ++ {
 		
 
-		if geomString == "LINE" {
+		switch geomString {
+		case string(geometry.LineType):
 			geom = &geometry.Line{}
-		} else if geomString == "POINT" {
+		case string(geometry.PointType):
 			geom = &geometry.Point{}
-		} else if geomString == "CIRCLE" {
+		case string(geometry.CircleType):
 			geom = &geometry.Circle{}
-		} else if geomString  == "POLYGON" {
+		case string(geometry.PolygonType):
 			geom = &geometry.Polygon{}
 		}
 
