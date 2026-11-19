@@ -21,7 +21,7 @@ type dBConfig struct {
 	InterfaceIP    string `envparse:"MERCURY_INTERFACE_IP"`
 	UnixSocketPath string `envparse:"MERCURY_SOCKET_PATH"`
 	DataPath       string `envparse:"MERCURY_DATA_PATH"`
-	UserDatabaseConnectionString string `envparse:"MERCURY_USER_DB_CONNECTION_STRING`
+	UserDatabaseConnectionString string `envparse:"MERCURY_USER_DB_CONNECTION_STRING"`
 }
 
 func buildDefaultConfig() *dBConfig {
