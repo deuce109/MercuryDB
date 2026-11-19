@@ -243,10 +243,7 @@ func (f *MercuryFile) readGeometry() (geometry.Geometry, error) {
 		return nil, err
 	}
 
-	var result geometry.Geometry
-
-	err = serialization.DeserializeGeometry(data, result)
-	return result, err
+	return serialization.DeserializeGeometry(data)
 }
 
 func (f *MercuryFile) GetGeometry() geometry.Geometry {
