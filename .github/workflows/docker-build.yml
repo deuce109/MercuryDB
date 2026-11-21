@@ -30,6 +30,6 @@ jobs:
           push: false
           file: ./docker/dockerfile
           load: true
-          tags: mercurydb:${{ inputs.image_tag }}
+          tags: mercurydb:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
