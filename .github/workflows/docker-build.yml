@@ -14,7 +14,7 @@ on:
 
 jobs:
   docker-build:
-    runs-on: alpine-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
