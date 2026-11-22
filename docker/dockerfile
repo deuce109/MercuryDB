@@ -2,14 +2,17 @@ FROM golang:1.27.4-alpine AS builder
 
 WORKDIR /src
 
-COPY ./go.mod ./go.mod
+COPY ./go.work ./go.work
+COPY ./go.work.sum ./go.work.sum
+
 
 RUN go mod download
 
 COPY . .
 
-RUN export CGO_ENABLED=1 GOOS=linux && cd ./common go test -v -race ./... && cd ../db && go test -v -race ./... \
-     go build -ldflags "-s -w" -o /app/mercury ./
+RUN export CGO_ENABLED=1 GOOS=linux &&\
+    go test -v -race ./db/... ./common/...  &&\
+    go build -ldflags "-s -w" -o /app/mercury/ ./db
 
 
 FROM scratch
