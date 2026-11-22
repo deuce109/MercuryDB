@@ -2,9 +2,10 @@ FROM golang:1.27.4-alpine AS builder
 
 WORKDIR /src
 
-COPY ./go.work ./go.work
-COPY ./go.work.sum ./go.work.sum
+COPY ./go.work ./go.work.sum ./
 
+COPY ./db/go.mod ./db/go.sum ./db/
+COPY ./common/go.mod ./common/go.sum ./common/
 
 RUN go mod download
 
