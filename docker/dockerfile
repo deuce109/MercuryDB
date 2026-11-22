@@ -5,7 +5,7 @@ WORKDIR /src
 COPY ./go.work ./go.work.sum ./
 
 COPY ./db/go.mod ./db/go.sum ./db/
-COPY ./common/go.mod ./common/go.sum ./common/
+COPY ./common/go.mod ./common/
 
 RUN go mod download
 
