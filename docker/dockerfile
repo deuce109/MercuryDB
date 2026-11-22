@@ -8,8 +8,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go test -v -race ./... && \
-    CGO_ENABLED=1 GOOS=linux go build -ldflags "-s -w" -o /app/mercury ./
+RUN CGO_ENABLED=1 GOOS=linux go test -v -race ./... && \
+     go build -ldflags "-s -w" -o /app/mercury ./
 
 
 FROM scratch
